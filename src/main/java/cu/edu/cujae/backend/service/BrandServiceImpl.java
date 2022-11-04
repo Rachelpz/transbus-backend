@@ -52,7 +52,7 @@ public class BrandServiceImpl implements BrandService {
         CS.setDouble(5, brand.getFuel_consumtion());
         CS.setInt(4, brand.getFuel_type().getFuel_id());
 
-        CS.executeUpdate();
+         CS.executeUpdate();
     }
 
 
