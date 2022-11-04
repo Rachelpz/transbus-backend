@@ -10,7 +10,7 @@ public class UserDto {
 	private String email;
 	private String identification;
 	private List<RoleDto> roles;
-	
+
 	public UserDto() {
 		super();
 	}
@@ -26,7 +26,7 @@ public class UserDto {
 		this.identification = identification;
 		this.roles = roles;
 	}
-	
+
 	public String getId() {
 		return id;
 	}

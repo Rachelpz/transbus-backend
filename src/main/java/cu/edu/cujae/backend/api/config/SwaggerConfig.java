@@ -27,7 +27,7 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("Swagger API")
-                .description("Pweb-Backend-API")
+                .description("TransBus-Backend-API")
                 .termsOfServiceUrl("")
                 .contact(new Contact("Facultad Informática", "", ""))
                 .version("1.0")
