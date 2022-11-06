@@ -2,10 +2,8 @@ package cu.edu.cujae.backend.service;
 
 
 import cu.edu.cujae.backend.core.dto.BrandDto;
-import cu.edu.cujae.backend.core.dto.FuelDto;
 import cu.edu.cujae.backend.core.service.BrandService;
 import cu.edu.cujae.backend.core.service.Fuel_TypeService;
-import cu.edu.cujae.backend.core.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -36,7 +34,7 @@ public class BrandServiceImpl implements BrandService {
         CS.setString(1, brand.getBrand_name());
         CS.setInt(2, brand.getSeats_numb().intValue());
         CS.setInt(3, brand.getFuel_type().getFuel_id());
-        CS.setDouble(4, brand.getFuel_consumtion());
+        CS.setDouble(4, brand.getFuel_consumption());
 
         CS.executeUpdate();
     }
@@ -49,7 +47,7 @@ public class BrandServiceImpl implements BrandService {
         CS.setInt(1, brand.getBrand_id());
         CS.setString(2, brand.getBrand_name());
         CS.setInt(3, brand.getSeats_numb());
-        CS.setDouble(5, brand.getFuel_consumtion());
+        CS.setDouble(5, brand.getFuel_consumption());
         CS.setInt(4, brand.getFuel_type().getFuel_id());
 
          CS.executeUpdate();
