@@ -38,7 +38,7 @@ public class BrandController {
 
     @PutMapping("/")
     public ResponseEntity<String> update(@RequestBody BrandDto brand) throws SQLException {
-        //TODO code for update
+        brandService.updateBrand(brand);
         return ResponseEntity.ok("Brand Updated");
     }
 

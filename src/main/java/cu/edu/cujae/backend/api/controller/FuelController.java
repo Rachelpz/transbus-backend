@@ -35,7 +35,7 @@ public class FuelController {
 
     @PutMapping("/")
     public ResponseEntity<String> update(@RequestBody FuelDto fuel) throws SQLException {
-        //TODO code for update
+        fuelService.updateFuel(fuel);
         return ResponseEntity.ok("Fuel Updated");
     }
 

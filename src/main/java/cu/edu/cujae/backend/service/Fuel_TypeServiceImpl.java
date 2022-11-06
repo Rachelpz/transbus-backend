@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import java.sql.CallableStatement;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,15 +22,16 @@ public class Fuel_TypeServiceImpl implements Fuel_TypeService {
     @Override
     public List<FuelDto> listFuels() throws SQLException {
         List<FuelDto> fuelList = new ArrayList<FuelDto>();
-        ResultSet rs = jdbcTemplate.getDataSource().getConnection().createStatement().executeQuery(
-                "SELECT * FROM fuel_type");
+        try (Connection conn = jdbcTemplate.getDataSource().getConnection()) {
+            ResultSet rs = conn.createStatement().executeQuery(
+                    "SELECT * FROM fuel_type");
 
-        while(rs.next()){
-            FuelDto fuel = new FuelDto(rs.getInt("fuel_type_id")
-                    ,rs.getString("fuel_type_name"));
-            fuelList.add(fuel);
+            while (rs.next()) {
+                FuelDto fuel = new FuelDto(rs.getInt("fuel_type_id")
+                        , rs.getString("fuel_type_name"));
+                fuelList.add(fuel);
+            }
         }
-
         return fuelList;
     }
 
@@ -41,20 +39,23 @@ public class Fuel_TypeServiceImpl implements Fuel_TypeService {
     public FuelDto getFuelById(Integer FuelId) throws SQLException{
         FuelDto fuel = null;
 
-        PreparedStatement pstmt = jdbcTemplate.getDataSource().getConnection().prepareStatement(
-                "SELECT * FROM fuel_type where fuel_type_id = ?");
+        try (Connection conn = jdbcTemplate.getDataSource().getConnection()) {
 
-        pstmt.setInt(1, FuelId);
+            PreparedStatement pstmt = conn.prepareStatement(
+                    "SELECT * FROM fuel_type where fuel_type_id = ?");
 
-        ResultSet rs = pstmt.executeQuery();
 
-        while(rs.next()){
-            fuel = new FuelDto(rs.getInt("fuel_type_id")
-                    ,rs.getString("fuel_type_name")
+            pstmt.setInt(1, FuelId);
 
-            );
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                fuel = new FuelDto(rs.getInt("fuel_type_id")
+                        , rs.getString("fuel_type_name")
+
+                );
+            }
         }
-
         return fuel;
     }
 
@@ -62,31 +63,37 @@ public class Fuel_TypeServiceImpl implements Fuel_TypeService {
     @Override
     public FuelDto getFuelByBrandId(Integer userId) throws SQLException {
         FuelDto fuel = new FuelDto();
-        PreparedStatement pstmt = jdbcTemplate.getDataSource().getConnection().prepareStatement(
-                "SELECT fuel_type_id, fuel_type_name FROM fuel_type inner join brand on brand.fuel_type = fuel_type.fuel_type_id where brand.brand_id = ?");
+        try (Connection conn = jdbcTemplate.getDataSource().getConnection()) {
+            PreparedStatement pstmt= conn.prepareStatement(
+                    "SELECT fuel_type_id, fuel_type_name FROM fuel_type inner join brand on brand.fuel_type = fuel_type.fuel_type_id where brand.brand_id = ?");
 
-        pstmt.setInt(1, userId);
+            pstmt.setInt(1, userId);
 
-        ResultSet rs = pstmt.executeQuery();
+            ResultSet rs = pstmt.executeQuery();
 
-        while(rs.next()){
-            fuel = new FuelDto(rs.getInt("fuel_type_id")
-                    ,rs.getString("fuel_type_name"));
+            while (rs.next()) {
+                fuel = new FuelDto(rs.getInt("fuel_type_id")
+                        , rs.getString("fuel_type_name"));
+            }
         }
         return fuel;
     }
 
     @Override
-    public void createFuel(FuelDto fuel) throws SQLException{
-        CallableStatement CS = jdbcTemplate.getDataSource().getConnection().prepareCall(
-                "{call fuel_insert(?)}");
+    public void createFuel(FuelDto fuel) throws SQLException {
+        try (Connection conn = jdbcTemplate.getDataSource().getConnection()) {
+            CallableStatement CS = conn.prepareCall(
+                    "{call fuel_insert(?)}");
+
 
         CS.setString(1, fuel.getFuel_name());
         CS.executeUpdate();
     }
+    }
 
     @Override
     public void updateFuel(FuelDto fuel) throws SQLException {
+
         CallableStatement CS = jdbcTemplate.getDataSource().getConnection().prepareCall(
                 "{call fuel_update(?,?)}");
         CS.setInt(1, fuel.getFuel_id());
@@ -97,10 +104,12 @@ public class Fuel_TypeServiceImpl implements Fuel_TypeService {
 
     @Override
     public void deleteFuel(Integer fuelId) throws SQLException {
-        CallableStatement CS = jdbcTemplate.getDataSource().getConnection().prepareCall(
-                "{call fuel_delete(?)}");
+        try (Connection conn = jdbcTemplate.getDataSource().getConnection()) {
+            CallableStatement CS = conn.prepareCall(
+                    "{call fuel_delete(?)}");
 
-        CS.setInt(1, fuelId);
-        CS.executeUpdate();
+            CS.setInt(1, fuelId);
+            CS.executeUpdate();
+        }
     }
 }
