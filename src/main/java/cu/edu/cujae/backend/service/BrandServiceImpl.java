@@ -41,25 +41,32 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     public void updateBrand(BrandDto brand) throws SQLException {
-        CallableStatement CS = jdbcTemplate.getDataSource().getConnection().prepareCall(
-                "{call brand_update(?,?,?,?,?)}");
-        CS.setInt(1, brand.getBrand_id());
-        CS.setString(2, brand.getBrand_name());
-        CS.setInt(3, brand.getSeats_numb());
-        CS.setInt(5, brand.getFuel_consumption());
-        CS.setInt(4, brand.getFuel_type().getFuel_id());
+        try (Connection conn = jdbcTemplate.getDataSource().getConnection()) {
 
-         CS.executeUpdate();
+            PreparedStatement pstmt = conn.prepareStatement(
+                    "update brand set brand_name = ?, seats_numb = ?, fuel_type = ?, fuel_consumtion = ? where brand_id = ?");
+
+            pstmt.setInt(5, brand.getBrand_id());
+            pstmt.setString(1, brand.getBrand_name());
+            pstmt.setInt(2, brand.getSeats_numb());
+            pstmt.setInt(4, brand.getFuel_consumption());
+            pstmt.setInt(3, brand.getFuel_type().getFuel_id());
+
+            pstmt.executeUpdate();
+        }
     }
 
 
     @Override
     public void deleteBrand(Integer brandId) throws SQLException{
-        CallableStatement CS = jdbcTemplate.getDataSource().getConnection().prepareCall(
-                "{call brand_delete(?)}");
+        try (Connection conn = jdbcTemplate.getDataSource().getConnection()) {
+            CallableStatement CS = conn.prepareCall(
+                    "{call brand_delete(?)}");
 
-        CS.setInt(1, brandId);
-        CS.executeUpdate();
+
+            CS.setInt(1, brandId);
+            CS.executeUpdate();
+        }
     }
 
     @Override
@@ -85,22 +92,23 @@ public class BrandServiceImpl implements BrandService {
     public BrandDto getBrandById(Integer brandId) throws SQLException {
 
         BrandDto brand = null;
+        try (Connection conn = jdbcTemplate.getDataSource().getConnection()) {
 
-        PreparedStatement pstmt = jdbcTemplate.getDataSource().getConnection().prepareStatement(
-                "Select * from brand join fuel_type on fuel_type.fuel_type_id=brand.fuel_type where brand_id=?");
+            PreparedStatement pstmt = conn.prepareStatement(
+                    "Select * from brand join fuel_type on fuel_type.fuel_type_id=brand.fuel_type where brand_id=?");
 
-        pstmt.setInt(1, brandId);
+            pstmt.setInt(1, brandId);
 
-        ResultSet rs = pstmt.executeQuery();
+            ResultSet rs = pstmt.executeQuery();
 
-        while(rs.next()){
-            brand = new BrandDto(rs.getInt("brand_id")
-                    ,rs.getString("brand_name")
-                    , rs.getInt("seats_numb")
-                    , rs.getInt("fuel_consumtion")
-                    , fuelService.getFuelByBrandId(rs.getInt("fuel_type")));
+            while (rs.next()) {
+                brand = new BrandDto(rs.getInt("brand_id")
+                        , rs.getString("brand_name")
+                        , rs.getInt("seats_numb")
+                        , rs.getInt("fuel_consumtion")
+                        , fuelService.getFuelByBrandId(rs.getInt("fuel_type")));
+            }
         }
-
         return brand;
     }
 }
