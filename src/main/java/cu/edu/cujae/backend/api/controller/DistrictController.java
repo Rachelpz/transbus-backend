@@ -36,7 +36,7 @@ public class DistrictController {
 
     @PutMapping("/")
     public ResponseEntity<String> updateDistrict(@RequestBody DistrictDto district) throws SQLException {
-        //TODO code for update
+        districtService.updateDistrict(district);
         return ResponseEntity.ok("District Updated");
     }
 

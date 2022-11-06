@@ -32,9 +32,9 @@ public class BrandServiceImpl implements BrandService {
                 "{call brand_insert(?,?,?,?)}");
 
         CS.setString(1, brand.getBrand_name());
-        CS.setInt(2, brand.getSeats_numb().intValue());
+        CS.setInt(2, brand.getSeats_numb());
         CS.setInt(3, brand.getFuel_type().getFuel_id());
-        CS.setDouble(4, brand.getFuel_consumption());
+        CS.setInt(4, brand.getFuel_consumption());
 
         CS.executeUpdate();
     }
@@ -73,8 +73,8 @@ public class BrandServiceImpl implements BrandService {
             BrandDto brand = new BrandDto(rs.getInt("brand_id")
                     , rs.getString("brand_name")
                     , rs.getInt("seats_numb")
-                    , rs.getDouble("fuel_consumtion")
-                    , fuelService.getFuelByBrandId(rs.getInt("brand_id")));
+                    , rs.getInt("fuel_consumtion")
+                    , fuelService.getFuelByBrandId(rs.getInt("fuel_type")));
             brandList.add(brand);
         }
 
@@ -97,8 +97,8 @@ public class BrandServiceImpl implements BrandService {
             brand = new BrandDto(rs.getInt("brand_id")
                     ,rs.getString("brand_name")
                     , rs.getInt("seats_numb")
-                    , rs.getDouble("fuel_consumtion")
-                    , fuelService.getFuelByBrandId(rs.getInt("brand_id")));
+                    , rs.getInt("fuel_consumtion")
+                    , fuelService.getFuelByBrandId(rs.getInt("fuel_type")));
         }
 
         return brand;

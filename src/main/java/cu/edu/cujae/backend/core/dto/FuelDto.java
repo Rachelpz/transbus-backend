@@ -10,7 +10,7 @@ public class FuelDto {
     }
 
     public FuelDto(Integer fuel_id, String fuel_name) {
-        super();
+
         this.fuel_id = fuel_id;
         this.fuel_name = fuel_name;
     }

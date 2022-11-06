@@ -33,7 +33,7 @@ public class DistrictServiceImpl implements DistrictService {
     @Override
     public void updateDistrict(DistrictDto district) throws SQLException {
         CallableStatement CS = jdbcTemplate.getDataSource().getConnection().prepareCall(
-                "{call district_update(?)}");
+                "{call district_update(?,?)}");
 
         CS.setInt(1, district.getDistrict_id());
         CS.setString(2, district.getDistrict_name());
