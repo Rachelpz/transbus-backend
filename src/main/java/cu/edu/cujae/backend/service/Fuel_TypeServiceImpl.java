@@ -93,13 +93,16 @@ public class Fuel_TypeServiceImpl implements Fuel_TypeService {
 
     @Override
     public void updateFuel(FuelDto fuel) throws SQLException {
+        try (Connection conn = jdbcTemplate.getDataSource().getConnection()) {
 
-        CallableStatement CS = jdbcTemplate.getDataSource().getConnection().prepareCall(
-                "{call fuel_update(?,?)}");
-        CS.setInt(1, fuel.getFuel_id());
-        CS.setString(2, fuel.getFuel_name());
+            PreparedStatement pstmt = conn.prepareStatement(
+                    "update fuel_type set fuel_type_name = ? where fuel_type_id = ?");
 
-        CS.executeUpdate();
+            pstmt.setInt(2, fuel.getFuel_id());
+            pstmt.setString(1, fuel.getFuel_name());
+
+            pstmt.executeUpdate();
+        }
     }
 
     @Override
