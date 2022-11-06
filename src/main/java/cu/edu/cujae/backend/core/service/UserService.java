@@ -9,7 +9,7 @@ public interface UserService {
 	
 	void createUser(UserDto user) throws SQLException;
 	
-	void updateUser(UserDto user);
+	void updateUser(UserDto user) throws SQLException;
 	
 	List<UserDto> listUsers() throws SQLException;
 	

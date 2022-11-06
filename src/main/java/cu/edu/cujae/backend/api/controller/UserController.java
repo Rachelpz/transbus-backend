@@ -36,7 +36,7 @@ public class UserController {
 	
 	@PutMapping("/")
     public ResponseEntity<String> update(@RequestBody UserDto user) throws SQLException {
-		//TODO code for update
+        userService.updateUser(user);
         return ResponseEntity.ok("User Updated");
     }
 	
