@@ -36,7 +36,7 @@ public class DriverController {
 
     @PutMapping("/")
     public ResponseEntity<String> updateDriver(@RequestBody DriverDto driver) throws SQLException {
-        //TODO code for update
+        driverService.updateDriver(driver);
         return ResponseEntity.ok("Driver Updated");
     }
 
