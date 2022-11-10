@@ -3,34 +3,33 @@ package cu.edu.cujae.backend.core.dto;
 import java.util.List;
 
 public class UserDto {
-	private String id;
+	private Integer id;
 	private String username;
 	private String fullName;
 	private String password;
-	private String email;
-	private String identification;
-	private List<RoleDto> roles;
+	//private String email;
+	//private String identification;
+	private RoleDto role;
 
 	public UserDto() {
 		super();
 	}
 
-	public UserDto(String id, String username, String fullName, String password, String email, String identification,
-			List<RoleDto> roles) {
+	public UserDto(Integer id, String username, String fullName, String password,
+			RoleDto role) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.fullName = fullName;
 		this.password = password;
-		this.email = email;
-		this.identification = identification;
-		this.roles = roles;
+
+		this.role = role;
 	}
 
-	public String getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	public String getUsername() {
@@ -51,22 +50,12 @@ public class UserDto {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getEmail() {
-		return email;
+
+
+	public RoleDto getRole() {
+		return role;
 	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	public String getIdentification() {
-		return identification;
-	}
-	public void setIdentification(String identification) {
-		this.identification = identification;
-	}
-	public List<RoleDto> getRoles() {
-		return roles;
-	}
-	public void setRoles(List<RoleDto> roles) {
-		this.roles = roles;
+	public void setRole(RoleDto role) {
+		this.role = role;
 	}
 }
