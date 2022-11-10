@@ -23,7 +23,7 @@ public class UserController {
     }
 	
 	@GetMapping("/{id}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable String id) throws SQLException {
+    public ResponseEntity<UserDto> getUserById(@PathVariable Integer id) throws SQLException {
 		UserDto user = userService.getUserById(id);
         return ResponseEntity.ok(user);
     }
@@ -41,7 +41,7 @@ public class UserController {
     }
 	
 	@DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable String id) throws SQLException {
+    public ResponseEntity<String> delete(@PathVariable Integer id) throws SQLException {
 		userService.deleteUser(id);
         return ResponseEntity.ok("User deleted");
     }

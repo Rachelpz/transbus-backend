@@ -26,14 +26,14 @@ public class RoleController {
     }
 	
 	@GetMapping("/{id}")
-    public ResponseEntity<RoleDto> geRoleById(@PathVariable Long id) throws SQLException {
+    public ResponseEntity<RoleDto> geRoleById(@PathVariable Integer id) throws SQLException {
 		RoleDto role = roleService.getRoleById(id);
         return ResponseEntity.ok(role);
     }
 	
 	@GetMapping("/users/{userId}")
-    public ResponseEntity<List<RoleDto>> geRoleByUserId(@PathVariable String userId) throws SQLException {
-		List<RoleDto> roleList = roleService.getRolesByUserId(userId);
+    public ResponseEntity<RoleDto> geRoleByUserId(@PathVariable Integer userId) throws SQLException {
+		RoleDto roleList = roleService.getRoleByUserId(userId);
         return ResponseEntity.ok(roleList);
     }
 	
