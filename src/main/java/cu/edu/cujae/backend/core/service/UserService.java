@@ -13,7 +13,7 @@ public interface UserService {
 	
 	List<UserDto> listUsers() throws SQLException;
 	
-	UserDto getUserById(String userId) throws SQLException;
+	UserDto getUserById(Integer userId) throws SQLException;
 	
-	void deleteUser(String id) throws SQLException;
+	void deleteUser(Integer id) throws SQLException;
 }

@@ -7,10 +7,10 @@ import cu.edu.cujae.backend.core.dto.RoleDto;
 
 public interface RoleService {
 
-	List<RoleDto> getRolesByUserId(String userId) throws SQLException;
+	RoleDto getRoleByUserId(Integer userId) throws SQLException;
 
 	List<RoleDto> listRoles() throws SQLException;
 
-	RoleDto getRoleById(Long roleId) throws SQLException;
+	RoleDto getRoleById(Integer roleId) throws SQLException;
 
 }

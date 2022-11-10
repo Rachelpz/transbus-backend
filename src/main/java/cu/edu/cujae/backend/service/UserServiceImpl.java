@@ -30,18 +30,15 @@ public class UserServiceImpl implements UserService {
 
 		try (Connection conn = jdbcTemplate.getDataSource().getConnection()) {
 			CallableStatement CS = conn.prepareCall(
-					"{call create_user(?, ?, ?, ?, ?, ?, ?)}");
+					"{call usuario_insert(?, ?, ?, ?, ?)}");
 
-			CS.setString(1, UUID.randomUUID().toString().replaceAll("-", "").substring(0, 9));
-			CS.setString(2, user.getUsername());
-			CS.setString(3, user.getFullName());
-			CS.setString(4, getMd5Hash(user.getPassword()));
-			CS.setString(5, user.getEmail());
-			CS.setString(6, user.getIdentification());
+			CS.setString(1, user.getUsername());
+			CS.setString(2, user.getFullName());
+			CS.setString(3, getMd5Hash(user.getPassword()));
+			//CS.setString(5, user.getEmail());
+			//CS.setString(6, user.getIdentification());
 
-			//roles separados por coma, ej: "1, 2, 4"
-			String roles = user.getRoles().stream().map(r -> r.getId().toString()).collect(Collectors.joining(","));
-			CS.setString(7, roles);
+			CS.setInt(4, user.getRole().getId() );
 			CS.executeUpdate();
 		}
 
@@ -53,16 +50,14 @@ public class UserServiceImpl implements UserService {
 		List<UserDto> userList = new ArrayList<UserDto>();
 		try (Connection conn = jdbcTemplate.getDataSource().getConnection()) {
 			ResultSet rs = conn.createStatement().executeQuery(
-					"SELECT * FROM xuser");
+					"SELECT * FROM usuario");
 
 			while(rs.next()){
-				userList.add(new UserDto(rs.getString("id")
-						,rs.getString("username")
-						,rs.getString("full_name")
-						,rs.getString("password")
-						,rs.getString("email")
-						,rs.getString("identification")
-						,roleService.getRolesByUserId(rs.getString("id"))));
+				userList.add(new UserDto(rs.getInt("user_id")
+						,rs.getString("user_name")
+						,rs.getString("full_user_name")
+						,rs.getString("pass")
+						,roleService.getRoleByUserId(rs.getInt("role_id"))));
 			}
 		}
 		return userList;
@@ -73,39 +68,37 @@ public class UserServiceImpl implements UserService {
 		try (Connection conn = jdbcTemplate.getDataSource().getConnection()) {
 
 			PreparedStatement pstmt = conn.prepareStatement(
-					"update xuser set username = ?, full_name = ?, email = ?, identification = ? where id = ?");
+					"update usuario set user_name = ?, full_user_name = ? where user_id = ?");
 
 			pstmt.setString(1, user.getUsername());
 			pstmt.setString(2, user.getFullName());
-			pstmt.setString(3, user.getEmail());
-			pstmt.setString(4, user.getIdentification());
-			pstmt.setString(5, user.getId());
+
+			pstmt.setInt(3, user.getId());
 
 			pstmt.executeUpdate();
 		}
 	}
 
 	@Override
-	public UserDto getUserById(String userId) throws SQLException {
+	public UserDto getUserById(Integer userId) throws SQLException {
 
 		UserDto user = null;
 		try (Connection conn = jdbcTemplate.getDataSource().getConnection()) {
 
 			PreparedStatement pstmt = conn.prepareStatement(
-					"SELECT * FROM xuser where id = ?");
+					"SELECT * FROM usuario where user_id = ?");
 
-			pstmt.setString(1, userId);
+			pstmt.setInt(1, userId);
 
 			ResultSet rs = pstmt.executeQuery();
 
 			while(rs.next()){
-				user = new UserDto(rs.getString("id")
-						,rs.getString("username")
-						,rs.getString("full_name")
-						,rs.getString("password")
-						,rs.getString("email")
-						,rs.getString("identification")
-						,roleService.getRolesByUserId(rs.getString("id")));
+				user = new UserDto(rs.getInt("user_id")
+						,rs.getString("user_name")
+						,rs.getString("full_user_name")
+						,rs.getString("pass")
+
+						,roleService.getRoleByUserId(rs.getInt("role_id")));
 			}
 		}
 
@@ -113,12 +106,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void deleteUser(String userId) throws SQLException {
+	public void deleteUser(Integer userId) throws SQLException {
 		try (Connection conn = jdbcTemplate.getDataSource().getConnection()) {
 			CallableStatement CS = conn.prepareCall(
-					"{call delete_user(?)}");
+					"{call usuario_delete(?)}");
 
-			CS.setString(1, userId);
+			CS.setInt(1, userId);
 			CS.executeUpdate();
 		}
 	}
