@@ -5,7 +5,7 @@ public class RoleDto {
 	private String roleName;
 	private Integer access_level;
 	
-	public RoleDto(Integer id, String roleName, Integer description) {
+	public RoleDto(Integer id, String roleName, Integer access_level) {
 		this.id = id;
 		this.roleName = roleName;
 		this.access_level = access_level;
