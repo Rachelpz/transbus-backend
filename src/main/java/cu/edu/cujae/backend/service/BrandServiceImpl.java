@@ -81,7 +81,7 @@ public class BrandServiceImpl implements BrandService {
                         , rs.getString("brand_name")
                         , rs.getInt("seats_numb")
                         , rs.getInt("fuel_consumtion")
-                        , fuelService.getFuelByBrandId(rs.getInt("fuel_type")));
+                        , fuelService.getFuelById(rs.getInt("fuel_type")));
                 brandList.add(brand);
             }
         }
@@ -106,7 +106,7 @@ public class BrandServiceImpl implements BrandService {
                         , rs.getString("brand_name")
                         , rs.getInt("seats_numb")
                         , rs.getInt("fuel_consumtion")
-                        , fuelService.getFuelByBrandId(rs.getInt("fuel_type")));
+                        , fuelService.getFuelById(rs.getInt("fuel_type")));
             }
         }
         return brand;

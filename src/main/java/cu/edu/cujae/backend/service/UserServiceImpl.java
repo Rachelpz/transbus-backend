@@ -6,6 +6,7 @@ import cu.edu.cujae.backend.core.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import sun.misc.BASE64Encoder;
 
 import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
@@ -30,7 +31,7 @@ public class UserServiceImpl implements UserService {
 
 		try (Connection conn = jdbcTemplate.getDataSource().getConnection()) {
 			CallableStatement CS = conn.prepareCall(
-					"{call usuario_insert(?, ?, ?, ?, ?)}");
+					"{call usuario_insert(?, ?, ?, ?)}");
 
 			CS.setString(1, user.getUsername());
 			CS.setString(2, user.getFullName());
@@ -57,7 +58,8 @@ public class UserServiceImpl implements UserService {
 						,rs.getString("user_name")
 						,rs.getString("full_user_name")
 						,rs.getString("pass")
-						,roleService.getRoleByUserId(rs.getInt("role"))));
+						,roleService.getRoleById(rs.getInt("role"))));
+
 			}
 		}
 		return userList;
@@ -98,7 +100,7 @@ public class UserServiceImpl implements UserService {
 						,rs.getString("full_user_name")
 						,rs.getString("pass")
 
-						,roleService.getRoleByUserId(rs.getInt("role")));
+						,roleService.getRoleById(rs.getInt("role")));
 			}
 		}
 
@@ -116,20 +118,18 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
-	private String getMd5Hash(String password) {
-		MessageDigest md;
-		String md5Hash = "";
+	private String getMd5Hash(String chain) {
+		MessageDigest md5;
+		String retorno = "";
 		try {
-			md = MessageDigest.getInstance("MD5");
-			md.update(password.getBytes());
-			byte[] digest = md.digest();
-			md5Hash = DatatypeConverter
-					.printHexBinary(digest).toUpperCase();
+			md5 = MessageDigest.getInstance("MD5");
+			md5.update(chain.getBytes());
+			byte[] keys = md5.digest();
+			retorno = new String(new BASE64Encoder().encode(keys));
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		return md5Hash;
-	}
 
+		}
+		return retorno;
+	}
 }
