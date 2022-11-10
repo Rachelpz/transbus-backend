@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
 						,rs.getString("user_name")
 						,rs.getString("full_user_name")
 						,rs.getString("pass")
-						,roleService.getRoleByUserId(rs.getInt("role_id"))));
+						,roleService.getRoleByUserId(rs.getInt("role"))));
 			}
 		}
 		return userList;
@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService {
 						,rs.getString("full_user_name")
 						,rs.getString("pass")
 
-						,roleService.getRoleByUserId(rs.getInt("role_id")));
+						,roleService.getRoleByUserId(rs.getInt("role")));
 			}
 		}
 
