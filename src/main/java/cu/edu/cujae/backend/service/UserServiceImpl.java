@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
 		List<UserDto> userList = new ArrayList<UserDto>();
 		try (Connection conn = jdbcTemplate.getDataSource().getConnection()) {
 			ResultSet rs = conn.createStatement().executeQuery(
-					"SELECT * FROM usuario");
+					"SELECT * FROM usuario join role on role.role_id=usuario.role order by role.role_name");
 
 			while(rs.next()){
 				userList.add(new UserDto(rs.getInt("user_id")
