@@ -26,7 +26,7 @@ public class ServiceServiceImpl implements ServiceService {
 
             CS.setString(1, service.getService_name());
             CS.setString(2, service.getPickup_place());
-            CS.setDate(3, (Date) service.getPickup_time());
+            CS.setTimestamp(3, new java.sql.Timestamp(service.getPickup_time().getTime()));
             CS.setFloat(4, service.getKm_traveled());
             CS.setFloat(5, service.getSpent_fuel());
             CS.setString(6, service.getService_type());
@@ -44,7 +44,7 @@ public class ServiceServiceImpl implements ServiceService {
             CS.setInt(1, service.getService_id());
             CS.setString(2, service.getService_name());
             CS.setString(3, service.getPickup_place());
-            CS.setDate(4, (Date) service.getPickup_time());
+            CS.setTimestamp(4, new java.sql.Timestamp(service.getPickup_time().getTime()));
             CS.setFloat(5, service.getKm_traveled());
             CS.setFloat(6, service.getSpent_fuel());
             CS.setString(7, service.getService_type());
@@ -67,7 +67,7 @@ public class ServiceServiceImpl implements ServiceService {
                         rs.getInt("service_id"),
                         rs.getString("service_name"),
                         rs.getString("pickup_place"),
-                        rs.getDate("pickup_time"),
+                        rs.getTime("pickup_time"),
                         rs.getFloat("km_traveled"),
                         rs.getFloat("spent_fuel"),
                         rs.getString("service_type")
@@ -96,7 +96,7 @@ public class ServiceServiceImpl implements ServiceService {
                         rs.getInt("service_id"),
                         rs.getString("service_name"),
                         rs.getString("pickup_place"),
-                        rs.getDate("pickup_time"),
+                        rs.getTime("pickup_time"),
                         rs.getFloat("km_traveled"),
                         rs.getFloat("spent_fuel"),
                         rs.getString("service_type")
