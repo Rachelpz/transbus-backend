@@ -43,9 +43,9 @@ public class GroupServiceImpl implements GroupService {
                     "{call touristic_group_update(?,?,?,?,?,?)}");
 
             CS.setInt(1, group.getGroup_id());
-            CS.setString(1, group.getGroup_name());
-            CS.setInt(2, group.getPaxamount());
-            CS.setInt(3, group.getCountry().getCountry_id());
+            CS.setString(2, group.getGroup_name());
+            CS.setInt(3, group.getPaxamount());
+            CS.setInt(4, group.getCountry().getCountry_id());
 
             CS.executeUpdate();
         }
