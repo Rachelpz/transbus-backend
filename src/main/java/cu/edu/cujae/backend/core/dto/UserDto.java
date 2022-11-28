@@ -3,12 +3,11 @@ package cu.edu.cujae.backend.core.dto;
 import java.util.List;
 
 public class UserDto {
-	private Integer id;
+	private String id;
 	private String username;
 	private String fullName;
 	private String password;
 	private String email;
-
 	private String identification;
 	private List<RoleDto> roles;
 
@@ -16,7 +15,7 @@ public class UserDto {
 		super();
 	}
 
-	public UserDto(Integer id, String username, String fullName, String password, String email, String identification,
+	public UserDto(String id, String username, String fullName, String password, String email, String identification,
 				   List<RoleDto> roles) {
 		super();
 		this.id = id;
@@ -28,10 +27,10 @@ public class UserDto {
 		this.roles = roles;
 	}
 
-	public Integer getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(Integer id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public String getUsername() {
@@ -52,29 +51,22 @@ public class UserDto {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
 	public String getEmail() {
 		return email;
 	}
-
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
 	public String getIdentification() {
 		return identification;
 	}
-
 	public void setIdentification(String identification) {
 		this.identification = identification;
 	}
-
 	public List<RoleDto> getRoles() {
 		return roles;
 	}
-
 	public void setRoles(List<RoleDto> roles) {
 		this.roles = roles;
 	}
-
 }

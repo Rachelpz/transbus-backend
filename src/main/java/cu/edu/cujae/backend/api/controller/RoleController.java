@@ -15,26 +15,26 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/roles")
 public class RoleController {
-	
-	@Autowired
-	private RoleService roleService;
-	
-	@GetMapping("")
+
+    @Autowired
+    private RoleService roleService;
+
+    @GetMapping("")
     public ResponseEntity<List<RoleDto>> getRoles() throws SQLException {
-		List<RoleDto> roleList = roleService.listRoles();
+        List<RoleDto> roleList = roleService.listRoles();
         return ResponseEntity.ok(roleList);
     }
-	
-	@GetMapping("/{id}")
-    public ResponseEntity<RoleDto> geRoleById(@PathVariable Integer id) throws SQLException {
-		RoleDto role = roleService.getRoleById(id);
+
+    @GetMapping("/{id}")
+    public ResponseEntity<RoleDto> geRoleById(@PathVariable Long id) throws SQLException {
+        RoleDto role = roleService.getRoleById(id);
         return ResponseEntity.ok(role);
     }
-	
-	@GetMapping("/users/{userId}")
-    public ResponseEntity<RoleDto> geRoleByUserId(@PathVariable Integer userId) throws SQLException {
-		RoleDto roleList = roleService.getRoleByUserId(userId);
+
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<List<RoleDto>> geRoleByUserId(@PathVariable String userId) throws SQLException {
+        List<RoleDto> roleList = roleService.getRolesByUserId(userId);
         return ResponseEntity.ok(roleList);
     }
-	
+
 }

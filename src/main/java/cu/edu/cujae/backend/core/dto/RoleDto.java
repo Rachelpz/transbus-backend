@@ -1,25 +1,25 @@
 package cu.edu.cujae.backend.core.dto;
 
 public class RoleDto {
-	private Integer id;
+	private Long id;
 	private String roleName;
-	private Integer access_level;
-	
-	public RoleDto(Integer id, String roleName, Integer access_level) {
+	private String description;
+
+	public RoleDto(Long id, String roleName, String description) {
 		this.id = id;
 		this.roleName = roleName;
-		this.access_level = access_level;
+		this.description = description;
 	}
-	
+
 	public RoleDto() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public String getRoleName() {
@@ -28,10 +28,10 @@ public class RoleDto {
 	public void setRoleName(String roleName) {
 		this.roleName = roleName;
 	}
-	public Integer getAccess_level() {
-		return access_level;
+	public String getDescription() {
+		return description;
 	}
-	public void setAccess_level(Integer access_level) {
-		this.access_level = access_level;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }
