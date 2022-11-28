@@ -14,6 +14,6 @@ public interface UserService {
 	List<UserDto> listUsers() throws SQLException;
 	
 	UserDto getUserById(Integer userId) throws SQLException;
-	
+	UserDto getUserByUsername(String username) throws SQLException;
 	void deleteUser(Integer id) throws SQLException;
 }

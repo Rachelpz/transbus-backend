@@ -7,23 +7,25 @@ public class UserDto {
 	private String username;
 	private String fullName;
 	private String password;
-	//private String email;
-	//private String identification;
-	private RoleDto role;
+	private String email;
+
+	private String identification;
+	private List<RoleDto> roles;
 
 	public UserDto() {
 		super();
 	}
 
-	public UserDto(Integer id, String username, String fullName, String password,
-			RoleDto role) {
+	public UserDto(Integer id, String username, String fullName, String password, String email, String identification,
+				   List<RoleDto> roles) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.fullName = fullName;
 		this.password = password;
-
-		this.role = role;
+		this.email = email;
+		this.identification = identification;
+		this.roles = roles;
 	}
 
 	public Integer getId() {
@@ -51,11 +53,28 @@ public class UserDto {
 		this.password = password;
 	}
 
+	public String getEmail() {
+		return email;
+	}
 
-	public RoleDto getRole() {
-		return role;
+	public void setEmail(String email) {
+		this.email = email;
 	}
-	public void setRole(RoleDto role) {
-		this.role = role;
+
+	public String getIdentification() {
+		return identification;
 	}
+
+	public void setIdentification(String identification) {
+		this.identification = identification;
+	}
+
+	public List<RoleDto> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<RoleDto> roles) {
+		this.roles = roles;
+	}
+
 }

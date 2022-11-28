@@ -117,7 +117,31 @@ public class UserServiceImpl implements UserService {
 			CS.executeUpdate();
 		}
 	}
+	@Override
+	public UserDto getUserByUsername(String username) throws SQLException {
+		UserDto user = null;
+		try (Connection conn = jdbcTemplate.getDataSource().getConnection()) {
 
+			PreparedStatement pstmt = conn.prepareStatement(
+					"SELECT * FROM xuser where username = ?");
+
+			pstmt.setString(1, username);
+
+			ResultSet rs = pstmt.executeQuery();
+
+			while(rs.next()){
+				user = new UserDto(rs.getString("id")
+						,rs.getString("username")
+						,rs.getString("full_name")
+						,rs.getString("password")
+						,rs.getString("email")
+						,rs.getString("identification")
+						,roleService.getRolesByUserId(rs.getString("id")));
+			}
+		}
+
+		return user;
+	}
 	private String getMd5Hash(String chain) {
 		MessageDigest md5;
 		String retorno = "";
