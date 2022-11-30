@@ -1,11 +1,11 @@
 package cu.edu.cujae.backend.core.dto;
 
 public class RoleDto {
-	private Long id;
+	private Integer id;
 	private String roleName;
 	private String description;
 
-	public RoleDto(Long id, String roleName, String description) {
+	public RoleDto(Integer id, String roleName, String description) {
 		this.id = id;
 		this.roleName = roleName;
 		this.description = description;
@@ -16,10 +16,10 @@ public class RoleDto {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	public String getRoleName() {

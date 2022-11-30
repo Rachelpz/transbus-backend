@@ -1,5 +1,6 @@
 package cu.edu.cujae.backend.service;
 
+import cu.edu.cujae.backend.core.dto.RoleDto;
 import cu.edu.cujae.backend.core.dto.UserDto;
 import cu.edu.cujae.backend.core.service.RoleService;
 import cu.edu.cujae.backend.core.service.UserService;
@@ -27,27 +28,51 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private RoleService roleService;
 
+//	@Override
+//	public void createUser(UserDto user) throws SQLException {
+//
+//		try (Connection conn = jdbcTemplate.getDataSource().getConnection()) {
+//			CallableStatement CS = conn.prepareCall(
+//					"{call create_user(?, ?, ?, ?, ?, ?, ?)}");
+//
+//			CS.setString(1, UUID.randomUUID().toString().replaceAll("-", "").substring(0, 9));
+//			CS.setString(2, user.getUsername());
+//			CS.setString(3, user.getFullName());
+//			CS.setString(4, encodePass(user.getPassword()));
+//			CS.setString(5, user.getEmail());
+//			CS.setString(6, user.getIdentification());
+//
+//			//roles separados por coma, ej: "1, 2, 4"
+//			String roles = user.getRoles().stream().map(r -> r.getId().toString()).collect(Collectors.joining(","));
+//			CS.setString(7, roles);
+//			CS.executeUpdate();
+//		}
+//
+//
+//	}
+
 	@Override
-	public void createUser(UserDto user) throws SQLException {
-
+	public void createUser(UserDto user) throws SQLException{
 		try (Connection conn = jdbcTemplate.getDataSource().getConnection()) {
-			CallableStatement CS = conn.prepareCall(
-					"{call create_user(?, ?, ?, ?, ?, ?, ?)}");
+			PreparedStatement pstmt = conn.prepareStatement(
+					"insert into xuser values ?, ?, ?, ?, ?, ?"
+			);
+			pstmt.setString(1, UUID.randomUUID().toString().replaceAll("-", "").substring(0, 9));
+			pstmt.setString(2, user.getUsername());
+			pstmt.setString(3, user.getFullName());
+			pstmt.setString(4, encodePass(user.getPassword()));
+			pstmt.setString(5, user.getEmail());
+			pstmt.setString(6, user.getIdentification());
 
-			CS.setString(1, UUID.randomUUID().toString().replaceAll("-", "").substring(0, 9));
-			CS.setString(2, user.getUsername());
-			CS.setString(3, user.getFullName());
-			CS.setString(4, encodePass(user.getPassword()));
-			CS.setString(5, user.getEmail());
-			CS.setString(6, user.getIdentification());
+			pstmt.executeUpdate();
 
-			//roles separados por coma, ej: "1, 2, 4"
-			String roles = user.getRoles().stream().map(r -> r.getId().toString()).collect(Collectors.joining(","));
-			CS.setString(7, roles);
-			CS.executeUpdate();
+//			for (RoleDto role: user.getRoles()) {
+//				 pstmt = conn.prepareStatement("insert into user_role values ?, ?");
+//				 pstmt.setString(1, user.getId());
+//				 pstmt.setInt(2, role.getId());
+//				 pstmt.executeUpdate();
+//			}
 		}
-
-
 	}
 
 	private String encodePass(String password) {

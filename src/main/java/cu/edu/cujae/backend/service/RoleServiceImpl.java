@@ -33,7 +33,7 @@ public class RoleServiceImpl implements RoleService {
 			ResultSet rs = pstmt.executeQuery();
 
 			while(rs.next()){
-				roleList.add(new RoleDto(rs.getLong("id")
+				roleList.add(new RoleDto(rs.getInt("id")
 						,rs.getString("role_name")
 						,rs.getString("description")));
 			}
@@ -49,7 +49,7 @@ public class RoleServiceImpl implements RoleService {
 					"SELECT * FROM xrole");
 
 			while(rs.next()){
-				roleList.add(new RoleDto(rs.getLong("id")
+				roleList.add(new RoleDto(rs.getInt("id")
 						,rs.getString("role_name")
 						,rs.getString("description")));
 			}
@@ -70,7 +70,7 @@ public class RoleServiceImpl implements RoleService {
 			ResultSet rs = pstmt.executeQuery();
 
 			while(rs.next()){
-				role = new RoleDto(rs.getLong("id")
+				role = new RoleDto(rs.getInt("id")
 						,rs.getString("role_name")
 						,rs.getString("description"));
 			}
