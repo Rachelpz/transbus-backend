@@ -55,9 +55,10 @@ public class UserServiceImpl implements UserService {
 	public void createUser(UserDto user) throws SQLException{
 		try (Connection conn = jdbcTemplate.getDataSource().getConnection()) {
 			PreparedStatement pstmt = conn.prepareStatement(
-					"insert into xuser values ?, ?, ?, ?, ?, ?"
+					"insert into xuser values (?, ?, ?, ?, ?, ?)"
 			);
-			pstmt.setString(1, UUID.randomUUID().toString().replaceAll("-", "").substring(0, 9));
+			String user_id = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 9);
+			pstmt.setString(1, user_id);
 			pstmt.setString(2, user.getUsername());
 			pstmt.setString(3, user.getFullName());
 			pstmt.setString(4, encodePass(user.getPassword()));
@@ -66,12 +67,12 @@ public class UserServiceImpl implements UserService {
 
 			pstmt.executeUpdate();
 
-//			for (RoleDto role: user.getRoles()) {
-//				 pstmt = conn.prepareStatement("insert into user_role values ?, ?");
-//				 pstmt.setString(1, user.getId());
-//				 pstmt.setInt(2, role.getId());
-//				 pstmt.executeUpdate();
-//			}
+			for (RoleDto role: user.getRoles()) {
+				 pstmt = conn.prepareStatement("insert into user_role values (?, ?)");
+				 pstmt.setString(1, user_id);
+				 pstmt.setInt(2, role.getId());
+				 pstmt.executeUpdate();
+			}
 		}
 	}
 
@@ -113,6 +114,17 @@ public class UserServiceImpl implements UserService {
 			pstmt.setString(5, user.getId());
 
 			pstmt.executeUpdate();
+
+			pstmt = conn.prepareStatement("delete from user_role where user_id = ?");
+			pstmt.setString(1, user.getId());
+			pstmt.executeUpdate();
+
+			for (RoleDto role: user.getRoles()) {
+				pstmt = conn.prepareStatement("insert into user_role values (?, ?)");
+				pstmt.setString(1, user.getId());
+				pstmt.setInt(2, role.getId());
+				pstmt.executeUpdate();
+			}
 		}
 	}
 
@@ -153,8 +165,6 @@ public class UserServiceImpl implements UserService {
 			CS.executeUpdate();
 		}
 	}
-
-
 
 	@Override
 	public UserDto getUserByUsername(String username) throws SQLException {
