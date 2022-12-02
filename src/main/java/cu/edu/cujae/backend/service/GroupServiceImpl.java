@@ -26,7 +26,7 @@ public class GroupServiceImpl implements GroupService {
     public void createGroup(GroupDto group) throws SQLException {
         try(Connection conn = jdbcTemplate.getDataSource().getConnection()){
             CallableStatement CS = conn.prepareCall(
-                    "{call touristic_group_insert(?,?,?,?,?)}");
+                    "{call touristic_group_insert(?,?,?)}");
 
             CS.setString(1, group.getGroup_name());
             CS.setInt(2, group.getPaxamount());
@@ -40,7 +40,7 @@ public class GroupServiceImpl implements GroupService {
     public void updateGroup(GroupDto group) throws SQLException {
         try(Connection conn = jdbcTemplate.getDataSource().getConnection()){
             CallableStatement CS = conn.prepareCall(
-                    "{call touristic_group_update(?,?,?,?,?,?)}");
+                    "{call touristic_group_update(?,?,?,?)}");
 
             CS.setInt(1, group.getGroup_id());
             CS.setString(2, group.getGroup_name());
@@ -103,7 +103,7 @@ public class GroupServiceImpl implements GroupService {
     public void deleteGroup(Integer id) throws SQLException {
         try(Connection conn = jdbcTemplate.getDataSource().getConnection()){
             CallableStatement CS = conn.prepareCall(
-                    "{call vehicle_delete(?)}");
+                    "{call touristic_group_delete(?)}");
 
             CS.setInt(1, id);
             CS.executeUpdate();
