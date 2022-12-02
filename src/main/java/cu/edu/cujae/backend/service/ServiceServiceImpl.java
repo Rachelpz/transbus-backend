@@ -8,7 +8,10 @@ import org.springframework.stereotype.Service;
 
 
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -55,7 +58,7 @@ public class ServiceServiceImpl implements ServiceService {
     }
 
     @Override
-    public List<ServiceDto> listServices() throws SQLException {
+    public List<ServiceDto> listServices() throws SQLException  {
         List<ServiceDto> serviceList = new ArrayList<ServiceDto>();
 
         try(Connection conn = jdbcTemplate.getDataSource().getConnection()){
@@ -63,17 +66,23 @@ public class ServiceServiceImpl implements ServiceService {
                     "SELECT * FROM service ORDER BY service.service_id");
 
             while(rs.next()){
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+                String pts = rs.getTime("pickup_time").toString();
+                Date date = sdf.parse(pts);
+
                 ServiceDto service = new ServiceDto(
                         rs.getInt("service_id"),
                         rs.getString("service_name"),
                         rs.getString("pickup_place"),
-                        rs.getTime("pickup_time"),
+                        date,
                         rs.getFloat("km_traveled"),
                         rs.getFloat("spent_fuel"),
                         rs.getString("service_type")
                 );
                 serviceList.add(service);
             }
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
 
         return serviceList;
@@ -92,16 +101,22 @@ public class ServiceServiceImpl implements ServiceService {
             ResultSet rs = pstmt.executeQuery();
 
             while(rs.next()){
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+                String pts = rs.getTime("pickup_time").toString();
+                Date date = sdf.parse(pts);
+
                 service = new ServiceDto(
                         rs.getInt("service_id"),
                         rs.getString("service_name"),
                         rs.getString("pickup_place"),
-                        rs.getTime("pickup_time"),
+                        date,
                         rs.getFloat("km_traveled"),
                         rs.getFloat("spent_fuel"),
                         rs.getString("service_type")
                 );
             }
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
 
         return service;
