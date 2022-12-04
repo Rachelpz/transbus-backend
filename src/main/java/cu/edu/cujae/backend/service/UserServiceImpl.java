@@ -103,27 +103,34 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void updateUser(UserDto user) throws SQLException {
 		try (Connection conn = jdbcTemplate.getDataSource().getConnection()) {
+			String password = user.getPassword().isEmpty() ? getUserById(user.getId()).getPassword() : encodePass(user.getPassword());
+			System.out.println("\n\nPassword:\n" + getUserById(user.getId()).getPassword());
 
 			PreparedStatement pstmt = conn.prepareStatement(
-					"update xuser set username = ?, full_name = ?, email = ?, identification = ? where id = ?");
+					"update xuser set username = ?, full_name = ?, email = ?, identification = ?, password = ? where id = ?");
 
 			pstmt.setString(1, user.getUsername());
 			pstmt.setString(2, user.getFullName());
 			pstmt.setString(3, user.getEmail());
 			pstmt.setString(4, user.getIdentification());
-			pstmt.setString(5, user.getId());
+			pstmt.setString(5, password);
+			pstmt.setString(6, user.getId());
 
 			pstmt.executeUpdate();
 
-			pstmt = conn.prepareStatement("delete from user_role where user_id = ?");
-			pstmt.setString(1, user.getId());
-			pstmt.executeUpdate();
+			if (user.getRoles() != null) {
+				if (user.getRoles().size() != 0) {
+					pstmt = conn.prepareStatement("delete from user_role where user_id = ?");
+					pstmt.setString(1, user.getId());
+					pstmt.executeUpdate();
 
-			for (RoleDto role: user.getRoles()) {
-				pstmt = conn.prepareStatement("insert into user_role values (?, ?)");
-				pstmt.setString(1, user.getId());
-				pstmt.setInt(2, role.getId());
-				pstmt.executeUpdate();
+					for (RoleDto role: user.getRoles()) {
+						pstmt = conn.prepareStatement("insert into user_role values (?, ?)");
+						pstmt.setString(1, user.getId());
+						pstmt.setInt(2, role.getId());
+						pstmt.executeUpdate();
+					}
+				}
 			}
 		}
 	}
