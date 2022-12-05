@@ -1,6 +1,7 @@
 package cu.edu.cujae.backend.api.controller;
 
 import cu.edu.cujae.backend.core.dto.UserDto;
+import cu.edu.cujae.backend.core.email.EmailSenderService;
 import cu.edu.cujae.backend.core.email.Mail;
 import cu.edu.cujae.backend.core.service.UserService;
 import freemarker.template.TemplateException;
@@ -18,6 +19,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
+
+    @Autowired
+    private EmailSenderService emailSenderService;
 
     @Autowired
     private UserService userService;
@@ -41,9 +45,9 @@ public class UserController {
     }
 
     @PostMapping("")
-    public ResponseEntity<String> create(@RequestBody UserDto user) throws SQLException {
+    public ResponseEntity<String> create(@RequestBody UserDto user) throws SQLException ,MessagingException, IOException, TemplateException{
         userService.createUser(user);
-//        sendMailToUserWithCredentials(user.getFullName(),user.getEmail());
+        emailSenderService.sendEmail(user);
         return ResponseEntity.ok("User Created");
     }
 
@@ -58,7 +62,7 @@ public class UserController {
         userService.deleteUser(id);
         return ResponseEntity.ok("User deleted");
     }
-//
+
 //    private void sendMailToUserWithCredentials(String fullName, String email){
 //        Mail mail=new Mail();
 //        mail.setMailTo(email);

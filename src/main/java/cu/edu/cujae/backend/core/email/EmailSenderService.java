@@ -1,5 +1,8 @@
 package cu.edu.cujae.backend.core.email;
 
+import cu.edu.cujae.backend.core.dto.UserDto;
+import freemarker.template.Configuration;
+import freemarker.template.TemplateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
@@ -13,109 +16,36 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
 import java.io.IOException;
+import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class EmailSenderService {
-    @Autowired
-    private JavaMailSender javaMailSender;
+    final Configuration configuration;
+    final JavaMailSender javaMailSender;
 
-    @Value("${spring.mail.username}")
-    private String sender;
-
-    // To send a simple email
-
-    public String sendSimpleMail(Mail details) {
-
-        // Try block to check for exceptions
-
-        try {
-
-            // Creating a simple mail message
-
-            SimpleMailMessage mailMessage = new SimpleMailMessage();
-
-            // Setting up necessary details
-
-            mailMessage.setFrom(sender);
-
-            mailMessage.setTo(details.getRecipient());
-
-            mailMessage.setText(details.getMsgBody());
-
-            mailMessage.setSubject(details.getSubject());
-
-            // Sending the mail
-
-            javaMailSender.send(mailMessage);
-
-            return "Mail Sent Successfully...";
-        }
-
-        // Catch block to handle the exceptions
-
-        catch (Exception e) {
-
-            return "Error while Sending Mail";
-
-        }
-
+    public EmailSenderService(Configuration configuration, JavaMailSender javaMailSender) {
+        this.configuration = configuration;
+        this.javaMailSender = javaMailSender;
     }
 
-    // Method 2
-
-// To send an email with attachment
-
-    public String
-
-    sendMailWithAttachment(Mail details) {
-
-        // Creating a mime message
-
+    public void sendEmail(UserDto user) throws MessagingException, IOException, TemplateException {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
+        helper.setSubject("Welcome To SpringHow.com");
+        helper.setTo(user.getEmail());
+        String emailContent = getEmailContent(user);
+        helper.setText(emailContent, true);
+        javaMailSender.send(mimeMessage);
+    }
 
-        MimeMessageHelper mimeMessageHelper;
-
-        try {
-
-            // Setting multipart as true for attachments to
-
-            // be send
-
-            mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
-
-            mimeMessageHelper.setFrom(sender);
-
-            mimeMessageHelper.setTo(details.getRecipient());
-
-            mimeMessageHelper.setText(details.getMsgBody());
-
-            mimeMessageHelper.setSubject(details.getSubject());
-
-            // Adding the attachment
-
-            FileSystemResource file = new FileSystemResource(
-
-                    new File(details.getAttachment()));
-
-            mimeMessageHelper.addAttachment(file.getFilename(), file);
-
-            // Sending the mail
-
-            javaMailSender.send(mimeMessage);
-
-            return "Mail sent Successfully";
-
-        }
-        // Catch block to handle MessagingException
-
-        catch (MessagingException e) {
-
-            // Display message when exception occurred
-
-            return "Error while sending mail!!!";
-
-        }
-
+    String getEmailContent(UserDto user) throws IOException, TemplateException {
+        StringWriter stringWriter = new StringWriter();
+        Map<String, Object> model = new HashMap<>();
+        model.put("user", user);
+        configuration.getTemplate("user-registration-notification.ftlh").process(model, stringWriter);
+        return stringWriter.getBuffer().toString();
     }
 }
 
