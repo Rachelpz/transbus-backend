@@ -7,9 +7,12 @@
     <title>TransBus System</title>
 </head>
 <body>
-
-<div>Dear <b>${user.username}</b>, your account has been successfully registered</div>
+<div>Dear <b>${user.username}</b>, You have been successfully subscribed to the
+    <b>TransBus System</b></div>
 <br/>
+<#--<p>-->
+<#--    <img src="../../../../Recurso%201.png"/>-->
+<#--</p>-->
 <div> Have a nice day..!</div>
 </body>
 </html>
