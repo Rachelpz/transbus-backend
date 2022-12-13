@@ -42,7 +42,12 @@ public class DriverController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteDriver(@PathVariable Integer id) throws SQLException {
-        driverService.deleteDriver(id);
-        return ResponseEntity.ok("Driver deleted");
+        try {
+            driverService.deleteDriver(id);
+            return ResponseEntity.ok("Driver deleted");
+        }catch (SQLException e)
+        {
+            return ResponseEntity.ok(e.getMessage());
+        }
     }
 }
