@@ -25,6 +25,7 @@ public class EmailSenderService {
     final Configuration configuration;
     final JavaMailSender javaMailSender;
 
+    
     public EmailSenderService(Configuration configuration, JavaMailSender javaMailSender) {
         this.configuration = configuration;
         this.javaMailSender = javaMailSender;
@@ -33,7 +34,7 @@ public class EmailSenderService {
     public void sendEmail(UserDto user) throws MessagingException, IOException, TemplateException {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
-        helper.setSubject("Welcome To SpringHow.com");
+        helper.setSubject("Welcome To TransBus System");
         helper.setTo(user.getEmail());
         String emailContent = getEmailContent(user);
         helper.setText(emailContent, true);
