@@ -3,6 +3,7 @@ package cu.edu.cujae.backend.api.controller;
 import cu.edu.cujae.backend.core.dto.FuelDto;
 import cu.edu.cujae.backend.core.service.Fuel_TypeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,7 +42,12 @@ public class FuelController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Integer id) throws SQLException {
+        try {
         fuelService.deleteFuel(id);
         return ResponseEntity.ok("Fuel deleted");
+        }catch (SQLException e)
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Some SQL exception occured");
+        }
     }
 }
