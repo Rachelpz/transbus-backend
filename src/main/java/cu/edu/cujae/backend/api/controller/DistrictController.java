@@ -3,6 +3,7 @@ package cu.edu.cujae.backend.api.controller;
 import cu.edu.cujae.backend.core.dto.DistrictDto;
 import cu.edu.cujae.backend.core.service.DistrictService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,7 +43,12 @@ public class DistrictController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteDistrict(@PathVariable Integer id) throws SQLException {
+        try {
         districtService.deleteDistrict(id);
         return ResponseEntity.ok("District deleted");
+        }catch (SQLException e)
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Some SQL exception occured");
+        }
     }
 }

@@ -3,6 +3,7 @@ package cu.edu.cujae.backend.api.controller;
 import cu.edu.cujae.backend.core.dto.GroupDto;
 import cu.edu.cujae.backend.core.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,7 +43,12 @@ public class GroupController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteGroup(@PathVariable Integer id) throws SQLException {
+        try {
         groupService.deleteGroup(id);
         return ResponseEntity.ok("Group deleted");
+    }catch (SQLException e)
+    {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Some SQL exception occured");
+    }
     }
 }

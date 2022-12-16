@@ -3,6 +3,7 @@ package cu.edu.cujae.backend.api.controller;
 import cu.edu.cujae.backend.core.dto.VehicleDto;
 import cu.edu.cujae.backend.core.service.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,7 +43,12 @@ public class VehicleController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteVehicle(@PathVariable Integer id) throws SQLException {
+        try {
         vehicleService.deleteVehicle(id);
         return ResponseEntity.ok("Vehicle deleted");
+        }catch (SQLException e)
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Some SQL exception occured");
+        }
     }
 }
