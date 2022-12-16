@@ -1,5 +1,6 @@
 package cu.edu.cujae.backend.api.controller;
 
+import cu.edu.cujae.backend.core.dto.RoleDto;
 import cu.edu.cujae.backend.core.dto.UserDto;
 import cu.edu.cujae.backend.core.email.EmailSenderService;
 import cu.edu.cujae.backend.core.email.Mail;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.mail.MessagingException;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +48,16 @@ public class UserController {
 
     @PostMapping("")
     public ResponseEntity<String> create(@RequestBody UserDto user) throws SQLException ,MessagingException, IOException, TemplateException{
+        userService.createUser(user);
+        emailSenderService.sendEmail(user);
+        return ResponseEntity.ok("User Created");
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@RequestBody UserDto user) throws SQLException ,MessagingException, IOException, TemplateException{
+        List<RoleDto> roles = new ArrayList<>();
+        roles.add(new RoleDto(2, "", ""));
+        user.setRoles(roles);
         userService.createUser(user);
         emailSenderService.sendEmail(user);
         return ResponseEntity.ok("User Created");
