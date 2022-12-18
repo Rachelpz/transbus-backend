@@ -7,6 +7,7 @@ import cu.edu.cujae.backend.core.email.Mail;
 import cu.edu.cujae.backend.core.service.UserService;
 import freemarker.template.TemplateException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,9 +49,16 @@ public class UserController {
 
     @PostMapping("")
     public ResponseEntity<String> create(@RequestBody UserDto user) throws SQLException ,MessagingException, IOException, TemplateException{
-        userService.createUser(user);
-        emailSenderService.sendEmail(user);
-        return ResponseEntity.ok("User Created");
+        ResponseEntity<String> response = ResponseEntity.ok("User Created");
+
+        try {
+            userService.createUser(user);
+            emailSenderService.sendEmail(user);
+        } catch (SQLException e) {
+            response = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("A user with that username already exists");
+        }
+
+        return response;
     }
 
     @PostMapping("/register")

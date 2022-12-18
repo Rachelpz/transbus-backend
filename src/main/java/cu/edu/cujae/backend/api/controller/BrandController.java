@@ -11,7 +11,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 
-
 @RestController
 @RequestMapping("/api/v1/brands")
 public class BrandController {
@@ -46,11 +45,10 @@ public class BrandController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Integer id) throws SQLException {
         try {
-        brandService.deleteBrand(id);
-        return ResponseEntity.ok("Brand deleted");
-    }catch (SQLException e)
-    {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Some SQL exception occured");
-    }
+            brandService.deleteBrand(id);
+            return ResponseEntity.ok("Brand deleted");
+        } catch (SQLException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Some SQL exception occured");
+        }
     }
 }

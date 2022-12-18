@@ -104,7 +104,6 @@ public class UserServiceImpl implements UserService {
 	public void updateUser(UserDto user) throws SQLException {
 		try (Connection conn = jdbcTemplate.getDataSource().getConnection()) {
 			String password = user.getPassword().isEmpty() ? getUserById(user.getId()).getPassword() : encodePass(user.getPassword());
-			System.out.println("\n\nPassword:\n" + getUserById(user.getId()).getPassword());
 
 			PreparedStatement pstmt = conn.prepareStatement(
 					"update xuser set username = ?, full_name = ?, email = ?, identification = ?, password = ? where id = ?");
